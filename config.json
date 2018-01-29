@@ -1,0 +1,10 @@
+{
+    "name": "testFunction",
+    "description": "description",
+    "region": "us-east-1",
+    "runtime": "python3.6",
+    "handler": "lambda_function.lambda_handler",
+    "role": "role_arn_goes_here",
+    "timeout": "30",
+    "memory": "128"
+}
