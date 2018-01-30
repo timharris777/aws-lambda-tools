@@ -24,20 +24,7 @@ function readJson {
   fi; 
 }
 
-
-NAME=`readJson config.json name` || exit 1;
-HANDLER=`readJson config.json handler` || exit 1;
-REGION=`readJson config.json region` || exit 1;
-ROLE=`readJson config.json role` || exit 1;
-RUNTIME=`readJson config.json runtime` || exit 1;
-TIMEOUT=`readJson config.json timeout` || exit 1;
-MEMORY=`readJson config.json memory` || exit 1;
-TIMESTAMP="`date +%Y%m%d%H%M%S`";
-
-echo "START OF LOG" > log/toolkit-$TIMESTAMP.txt
-
-if [ $1 == "build" ]
-then
+function build {
     echo
     QUESTION="Have you filled in the requirements.txt file properly? (y/n) "
     echo $QUESTION >> log/toolkit-$TIMESTAMP.txt
@@ -53,10 +40,9 @@ then
         echo "All packages installed." | tee -a log/toolkit-$TIMESTAMP.txt
         echo
     fi
-fi
+}
 
-if [ $1 == "pack" ]
-then
+function pack {
     echo
     echo Packaging lambda... | tee -a log/toolkit-$TIMESTAMP.txt
     echo
@@ -65,10 +51,9 @@ then
     echo "Packaging complete. The zip file can be found in the dist folder." | tee -a ../log/toolkit-$TIMESTAMP.txt
     cd ..
     echo
-fi
+}
 
-if [ $1 == "upload" ]
-then
+function upload {
     echo
     echo "Checking if lambda exists." | tee -a log/toolkit-$TIMESTAMP.txt
     echo
@@ -129,10 +114,9 @@ then
             echo
         fi
     fi
-fi
+}
 
-if [ $1 == "test" ]
-then
+function test {
     echo
     echo Testing lambda... | tee -a log/toolkit-$TIMESTAMP.txt
     echo
@@ -142,6 +126,41 @@ then
     echo 
     echo To see output of lambda go to $PWD/log/run-$TIMESTAMP.txt | tee -a log/toolkit-$TIMESTAMP.txt
     echo
+}
+
+NAME=`readJson config.json name` || exit 1;
+HANDLER=`readJson config.json handler` || exit 1;
+REGION=`readJson config.json region` || exit 1;
+ROLE=`readJson config.json role` || exit 1;
+RUNTIME=`readJson config.json runtime` || exit 1;
+TIMEOUT=`readJson config.json timeout` || exit 1;
+MEMORY=`readJson config.json memory` || exit 1;
+TIMESTAMP="`date +%Y%m%d%H%M%S`";
+
+echo "START OF LOG" > log/toolkit-$TIMESTAMP.txt
+
+if [ $1 == "build" ]
+then
+    build
+fi
+
+if [ $1 == "pack" ]
+then
+    build
+    pack
+fi
+
+if [ $1 == "upload" ]
+then
+    build
+    pack
+    upload
+fi
+
+if [ $1 == "test" ]
+then
+    test
 fi 
+
 echo To see logs go to $PWD/log/toolkit-$TIMESTAMP.txt | tee -a log/toolkit-$TIMESTAMP.txt
 echo
