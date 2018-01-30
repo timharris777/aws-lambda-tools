@@ -146,13 +146,31 @@ fi
 
 if [ $1 == "pack" ]
 then
-    build
+    echo
+    QUESTION="Would you like to re-build required packages from requirements.txt (y/n) "
+    echo $QUESTION >> log/toolkit-$TIMESTAMP.txt
+    read -p "$QUESTION" -n 1 -r
+    echo "User Input Recorded: $REPLY " >> log/toolkit-$TIMESTAMP.txt
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        build
+    fi
     pack
 fi
 
 if [ $1 == "upload" ]
 then
-    build
+    echo
+    QUESTION="Would you like to re-build required packages from requirements.txt (y/n) "
+    echo $QUESTION >> log/toolkit-$TIMESTAMP.txt
+    read -p "$QUESTION" -n 1 -r
+    echo "User Input Recorded: $REPLY " >> log/toolkit-$TIMESTAMP.txt
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        build
+    fi
     pack
     upload
 fi
